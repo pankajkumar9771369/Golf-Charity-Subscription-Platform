@@ -95,7 +95,7 @@ const publishDraw = async (req, res) => {
 
     await draw.save();
 
-    // Fire Winner Notification Emails
+    // Fire Winner Notification Emails (Fire and forget)
     const populatedWinners = await Winner.find({ draw: draw._id }).populate('user', 'name email');
     populatedWinners.forEach(w => {
       sendEmail({
@@ -105,12 +105,12 @@ const publishDraw = async (req, res) => {
                <p>Your recent scores mathematically matched ${w.matchTier} of our generated numbers!</p>
                <p>You have been allocated a prize of <strong>$${w.prizeAmount.toFixed(2)}</strong>.</p>
                <p>Please log into your dashboard immediately to submit your proof criteria to our Admin team!</p>`
-      });
+      }).catch(console.error);
     });
 
     // 3. Send Global Notification to all active subscribers
     for (const u of activeUsers) {
-      await sendEmail({
+      sendEmail({
         email: u.email,
         subject: `🎯 Draw Results: ${draw.drawMonth} are OUT!`,
         html: `
@@ -123,7 +123,7 @@ const publishDraw = async (req, res) => {
             <p>Thank you for supporting our charities!</p>
           </div>
         `
-      });
+      }).catch(console.error);
     }
 
     res.json({

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // For dev. In prod, use standard relative path or env
+  baseURL: import.meta.env.VITE_API_URL || 'https://golf-charity-subscription-platform-1.onrender.com/api',
 });
 
 // Add a request interceptor to append the JWT

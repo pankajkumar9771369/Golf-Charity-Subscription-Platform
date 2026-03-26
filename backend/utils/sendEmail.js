@@ -21,6 +21,9 @@ const sendEmail = async (options) => {
           user: process.env.EMAIL,
           pass: process.env.EMAIL_PASSWORD,
         },
+        tls: {
+          rejectUnauthorized: false // Required for Gmail on cloud hosts like Render
+        }
       };
     }
 

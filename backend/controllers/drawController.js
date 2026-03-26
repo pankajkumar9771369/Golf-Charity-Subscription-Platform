@@ -73,10 +73,17 @@ const publishDraw = async (req, res) => {
 
     let nextJackpot = 0;
 
-    // Create winner records
+    // Create winner records (use upsert to prevent duplicates if draw is re-run)
+    const createWinnerSafe = (draw, user, matchTier, prizeAmount) =>
+      Winner.findOneAndUpdate(
+        { draw, user, matchTier },
+        { $setOnInsert: { draw, user, matchTier, prizeAmount } },
+        { upsert: true, new: true }
+      );
+
     if (match5Winners.length > 0) {
       const prizePerWinner = tier5Pool / match5Winners.length;
-      for (let w of match5Winners) await Winner.create({ draw: draw._id, user: w, matchTier: 5, prizeAmount: prizePerWinner });
+      for (let w of match5Winners) await createWinnerSafe(draw._id, w, 5, prizePerWinner);
       draw.jackpotRollover = 0;
     } else {
       nextJackpot = tier5Pool;
@@ -85,12 +92,12 @@ const publishDraw = async (req, res) => {
 
     if (match4Winners.length > 0) {
       const prizePerWinner = tier4Pool / match4Winners.length;
-      for (let w of match4Winners) await Winner.create({ draw: draw._id, user: w, matchTier: 4, prizeAmount: prizePerWinner });
+      for (let w of match4Winners) await createWinnerSafe(draw._id, w, 4, prizePerWinner);
     }
 
     if (match3Winners.length > 0) {
       const prizePerWinner = tier3Pool / match3Winners.length;
-      for (let w of match3Winners) await Winner.create({ draw: draw._id, user: w, matchTier: 3, prizeAmount: prizePerWinner });
+      for (let w of match3Winners) await createWinnerSafe(draw._id, w, 3, prizePerWinner);
     }
 
     await draw.save();

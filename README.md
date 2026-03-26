@@ -118,4 +118,4 @@ STRIPE_SECRET_KEY=your_live_secret_key
 
 ---
 
-*Built with ❤️ for Digital Heroes.*
+

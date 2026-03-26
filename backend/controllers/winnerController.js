@@ -45,7 +45,11 @@ const submitProof = async (req, res) => {
     }
 
     winner.proofImageUrl = proofImageUrl;
-    winner.status = 'pending'; // Reset to pending for admin review if it was rejected
+    // Only revert to pending review if the winner was previously rejected
+    // If already approved, keep status as approved so admin can proceed with Stripe payout
+    if (winner.status === 'rejected') {
+      winner.status = 'pending';
+    }
     await winner.save();
 
     res.json({ message: 'Proof submitted successfully', winner });

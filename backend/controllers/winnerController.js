@@ -37,7 +37,7 @@ const submitProof = async (req, res) => {
 
     let proofImageUrl = req.body.proofImageUrl;
     if (req.file) {
-      proofImageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+      proofImageUrl = req.file.path; // Cloudinary live URL
     }
 
     if (!proofImageUrl) {

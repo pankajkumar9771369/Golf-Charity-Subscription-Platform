@@ -9,15 +9,21 @@ router.put('/:id/status', protect, admin, updateWinnerStatus);
 router.post('/:id/pay', protect, admin, payWinnerWithStripe);
 
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'givegolf_proofs',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
   },
-  filename(req, file, cb) {
-    cb(null, `${req.user._id}-${Date.now()}-${file.originalname}`);
-  }
 });
 const upload = multer({ storage });
 

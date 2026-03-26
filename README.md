@@ -91,21 +91,31 @@ The application is now accessible at `http://localhost:5173`!
 
 ## 🌍 Production Deployment
 
-The project is fully configured and ready for live deployment on modern cloud providers (Render, Vercel, Heroku, etc.).
+The platform is live and fully optimized for production!
 
-1.  **Frontend (Vercel/Netlify):** Set the build command to `npm run build` and output directory to `dist/`. Add the `VITE_API_URL` environment variable pointing to your live backend.
-2.  **Backend (Render/Heroku):** Set the start command to `node server.js`. Add all `.env` variables from above and configure the **Production SMTP Mail System** mapping to your live domain (e.g., Hostinger).
+*   **Frontend (Vercel):** [https://golf-charity-subscription-platform-woad.vercel.app/](https://golf-charity-subscription-platform-woad.vercel.app/)
+*   **Backend (Render):** [https://golf-charity-subscription-platform-1.onrender.com/api](https://golf-charity-subscription-platform-1.onrender.com/api)
+
+### Production Environment Configuration
+Ensure these variables are set in your Render/Vercel dashboards for full functionality:
 
 ```env
-# Production SMTP Example
-SMTP_HOST=smtp.yourhost.com
-SMTP_PORT=465
-SMTP_USER=admin@yourdomain.com
-SMTP_PASS=your_live_email_password
-EMAIL_FROM_NAME="GiveGolf Team"
+# Essential Production Keys
+FRONTEND_URL=https://golf-charity-subscription-platform-woad.vercel.app
+RESEND_API_KEY=your_resend_api_key  # For robust HTTPS-based email delivery
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Stripe Config
+STRIPE_SECRET_KEY=your_live_secret_key
 ```
 
 ## 🔐 Default Admin Account
 **Email:** `admin@golfcharity.com`
 **Password:** `Admin1234!`
-*(Ensure you run `node seed.js` once locally or on your production database to create this user).*
+*(Ensure you run `node seed.js` once on your production database to create this user).*
+
+---
+
+*Built with ❤️ for Digital Heroes.*

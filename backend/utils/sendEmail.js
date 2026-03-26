@@ -2,15 +2,29 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: process.env.SMTP_PORT || 465,
-      secure: process.env.SMTP_PORT == '465',
-      auth: {
-        user: process.env.SMTP_USER || process.env.EMAIL,
-        pass: process.env.SMTP_PASS || process.env.EMAIL_PASSWORD,
-      },
-    });
+    let transporterConfig;
+
+    if (process.env.SMTP_HOST) {
+      transporterConfig = {
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_PORT == '465',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      };
+    } else {
+      transporterConfig = {
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      };
+    }
+
+    const transporter = nodemailer.createTransport(transporterConfig);
 
     const message = {
       from: `"${process.env.EMAIL_FROM_NAME || 'Golf Charity Platform'}" <${process.env.SMTP_USER || process.env.EMAIL}>`,

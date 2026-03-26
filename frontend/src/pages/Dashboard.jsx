@@ -251,15 +251,33 @@ const Dashboard = () => {
                     </span>
                   </div>
                   
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Action Required: Upload Scorecard Screenshot</p>
-                      <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={(e) => handleProofUpload(w._id, e.target.files[0])}
-                        style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', width: '100%' }}
-                      />
-                    </div>
+                    {w.status === 'pending' && (
+                      <div style={{ marginTop: '0.5rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Action Required: Upload Scorecard Screenshot</p>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => handleProofUpload(w._id, e.target.files[0])}
+                          style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', width: '100%' }}
+                        />
+                      </div>
+                    )}
+                    {(w.status === 'approved' || w.status === 'paid') && (
+                      <p style={{ fontSize: '0.75rem', color: 'var(--success)', marginTop: '0.5rem' }}>
+                        ✅ Proof verified. {w.status === 'paid' ? 'Prize has been paid out.' : 'Awaiting payout.'}
+                      </p>
+                    )}
+                    {w.status === 'rejected' && (
+                      <div style={{ marginTop: '0.5rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--danger)', marginBottom: '0.5rem' }}>❌ Proof rejected. Please re-upload a clearer screenshot.</p>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => handleProofUpload(w._id, e.target.files[0])}
+                          style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', width: '100%' }}
+                        />
+                      </div>
+                    )}
                 </div>
               ))}
             </div>
